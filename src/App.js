@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { Suspense, useState, useEffect } from "react";
+import MainPageLayout from "./layout/MainPage/MainPageLayout";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MainContent from "./layout/ServicesPage/MainContent";
+import MainContentContact from "./layout/ContatctUsPage/MainContentContact";
+import VideoPageContent from "./layout/VideosPage/VideoPageContent";
+import "./assets/css/style.css";
 
 function App() {
+  const [theme, setTheme] = useState("light");
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  };
+  useEffect(() => {
+    document.body.className = theme;
+  }, [theme]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Suspense fallback={"Loading..."}>
+      <div className={`App ${theme}`}>
+        <button
+          className="btn btn-lg btn-primary btn-lg-square back-to-top"
+          onClick={toggleTheme}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <i className="fa-solid fa-arrow-right-arrow-left"></i>
+        </button>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainPageLayout />} />
+            <Route path="/services" element={<MainContent />} />
+            <Route path="/contact" element={<MainContentContact />} />
+            <Route path="/videos" element={<VideoPageContent />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </Suspense>
   );
 }
 
